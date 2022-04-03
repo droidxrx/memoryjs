@@ -1,4 +1,4 @@
-const memoryFlags = {
+export const memoryFlags = {
 	// see: https://docs.microsoft.com/en-gb/windows/desktop/Memory/memory-protection-constants
 	access: {
 		PAGE_NOACCESS: 0x01,
@@ -37,7 +37,7 @@ const memoryFlags = {
 	},
 };
 
-const hardwareDebug = {
+export const hardwareDebug = {
 	registers: {
 		DR0: 0x0,
 		DR1: 0x1,
@@ -49,11 +49,4 @@ const hardwareDebug = {
 		TRIGGER_ACCESS: 0x3,
 		TRIGGER_WRITE: 0x1,
 	},
-};
-
-export default {
-	// memory flags
-	memoryFlags,
-	// debugger consts
-	hardwareDebug,
 };

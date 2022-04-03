@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access */
-import { MemoryJS } from './memoryjs';
+import { Library } from '.';
 
 const SIZEOF_STDSTRING_32BIT = 24;
 const SIZEOF_STDSTRING_64BIT = 32;
 const STDSTRING_LENGTH_OFFSET = 0x10;
 
-export function STRUCTRON_TYPE_STRING(memoryjs: MemoryJS) {
+export function STRUCTRON_TYPE_STRING(memoryjs: Library) {
 	/**
 	 * Custom string consumer/producer for Structron (due to complexity of `std::string`)
 	 * `std::string` is a container for a string which makes reading/writing to it tricky,

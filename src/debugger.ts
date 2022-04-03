@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { MemoryJS } from './memoryjs';
+import { Library } from '.';
 
 const lengths = {
 	byte: 1,
@@ -55,12 +55,12 @@ class Registers {
 }
 
 export default class Debugger extends EventEmitter {
-	memoryjs: MemoryJS;
+	memoryjs: Library;
 	registers: Registers;
 	attached: boolean;
 	intervals: { register: number; id: NodeJS.Timer }[];
 
-	constructor(memoryjs: MemoryJS) {
+	constructor(memoryjs: Library) {
 		super();
 		this.memoryjs = memoryjs;
 		this.registers = new Registers();

@@ -1,3 +1,5 @@
+import bindings from 'bindings';
+
 type dataTypeNum = 'byte' | 'int' | 'int32' | 'uint32' | 'int64' | 'uint64' | 'dword' | 'short' | 'long' | 'float' | 'double' | 'ptr' | 'pointer';
 type dataTypeBool = 'bool' | 'boolean';
 type dataTypeStr = 'string' | 'str';
@@ -107,6 +109,5 @@ export interface MemoryJS {
 	unloadDll(handle: number, moduleBaseAddressOrName: string | number): boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const memoryjs: MemoryJS = require('../build/Release/memoryjs.node');
+const memoryjs: MemoryJS = bindings('memoryjs.node');
 export default memoryjs;

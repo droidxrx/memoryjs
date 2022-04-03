@@ -2,12 +2,20 @@
 	"name": "memoryjs",
 	"version": "3.3.1",
 	"description": "Node add-on for memory reading and writing!",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"scripts": {
 		"install": "node-gyp rebuild --arch=x64 --release",
 		"build-ts": "rollup -c rollup.config.mjs",
-		"build-dts": "dts-bundle-generator -o dist/memoryjs.d.ts --project ./tsconfig.json src/index.ts --no-banner"
+		"build-dts": "dts-bundle-generator -o ./dist/index.d.ts --project ./tsconfig.json src/index.ts --no-banner"
 	},
 	"keywords": [
 		"memory",
@@ -20,6 +28,7 @@
 	"license": "MIT",
 	"gypfile": true,
 	"dependencies": {
+		"bindings": "^1.5.0",
 		"node-addon-api": "^4.3.0"
 	},
 	"devDependencies": {

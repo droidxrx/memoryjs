@@ -1,7 +1,7 @@
 import fs from 'fs';
-import constants from './consts';
+import { memoryFlags } from './consts';
 import Debugger from './debugger';
-import memoryjs, { dataType, flagsTypes, getReturnType, processId, processName, writeValue } from './memoryjs';
+import Memoryjs, { dataType, flagsTypes, getReturnType, processId, processName, writeValue } from './memoryjs';
 import { STRUCTRON_TYPE_STRING } from './utils';
 
 /** 1=T_STRING | 4=T_INT | 6=T_FLOAT */
@@ -17,92 +17,94 @@ const signatureTypes = {
 	SUBTRACT: 0x2,
 };
 
-type protectionType = keyof typeof constants.memoryFlags.access;
-type allocationType = keyof typeof constants.memoryFlags.allocation;
+type protectionType = keyof typeof memoryFlags.access;
+type allocationType = keyof typeof memoryFlags.allocation;
 
 const library = {
 	openProcess(processIdentifier: processName | processId) {
-		return memoryjs.openProcess(processIdentifier);
+		return Memoryjs.openProcess(processIdentifier);
 	},
 	closeProcess(handle: number) {
-		memoryjs.closeProcess(handle);
+		Memoryjs.closeProcess(handle);
 	},
 	getProcesses() {
-		return memoryjs.getProcesses();
+		return Memoryjs.getProcesses();
 	},
 	findModule(moduleName: string, processId: number) {
-		return memoryjs.findModule(moduleName, processId);
+		return Memoryjs.findModule(moduleName, processId);
 	},
 	getModules(processId: number) {
-		return memoryjs.getModules(processId);
+		return Memoryjs.getModules(processId);
 	},
 	readMemory<T extends dataType>(handle: number, address: number, dataType: T): getReturnType<T> {
-		return memoryjs.readMemory(handle, address, dataType);
+		return Memoryjs.readMemory(handle, address, dataType);
 	},
 	readBuffer(handle: number, address: number, size: number) {
-		return memoryjs.readBuffer(handle, address, size);
+		return Memoryjs.readBuffer(handle, address, size);
 	},
 	writeMemory(handle: number, address: number, value: writeValue, dataType: dataType) {
 		if (dataType === 'str' || dataType === 'string') value += '\0'; // add terminator
-		memoryjs.writeMemory(handle, address, value, dataType);
+		Memoryjs.writeMemory(handle, address, value, dataType);
 	},
 	writeBuffer(handle: number, address: number, buffer: Buffer) {
-		memoryjs.writeBuffer(handle, address, buffer);
+		Memoryjs.writeBuffer(handle, address, buffer);
 	},
 	findPattern(handle: number, pattern: string, flags: flagsTypes, patternOffset: number) {
-		return memoryjs.findPattern(handle, pattern, signatureTypes[flags], patternOffset);
+		return Memoryjs.findPattern(handle, pattern, signatureTypes[flags], patternOffset);
 	},
 	findPatternByModule(handle: number, moduleName: string, pattern: string, flags: flagsTypes, patternOffset: number) {
-		return memoryjs.findPatternByModule(handle, moduleName, pattern, signatureTypes[flags], patternOffset);
+		return Memoryjs.findPatternByModule(handle, moduleName, pattern, signatureTypes[flags], patternOffset);
 	},
 	findPatternByAddress(handle: number, baseAddress: number, pattern: string, flags: flagsTypes, patternOffset: number) {
-		return memoryjs.findPatternByAddress(handle, baseAddress, pattern, signatureTypes[flags], patternOffset);
+		return Memoryjs.findPatternByAddress(handle, baseAddress, pattern, signatureTypes[flags], patternOffset);
 	},
 	callFunction<T extends aTypes, E extends rTypes>(handle: number, args: argsFun<T>, returnType: E, address: number): callFunctionReturn<E> {
-		return memoryjs.callFunction(handle, args, returnType, address);
+		return Memoryjs.callFunction(handle, args, returnType, address);
 	},
 	virtualAllocEx(handle: number, address: number, size: number, allocation: allocationType, protection: protectionType) {
-		return memoryjs.virtualAllocEx(handle, address, size, constants.memoryFlags.allocation[allocation], constants.memoryFlags.access[protection]);
+		return Memoryjs.virtualAllocEx(handle, address, size, memoryFlags.allocation[allocation], memoryFlags.access[protection]);
 	},
 	virtualProtectEx(handle: number, address: number, size: number, protection: protectionType) {
-		return memoryjs.virtualProtectEx(handle, address, size, constants.memoryFlags.access[protection]);
+		return Memoryjs.virtualProtectEx(handle, address, size, memoryFlags.access[protection]);
 	},
 	getRegions(handle: number) {
-		return memoryjs.getRegions(handle);
+		return Memoryjs.getRegions(handle);
 	},
 	virtualQueryEx(handle: number, address: number) {
-		return memoryjs.virtualQueryEx(handle, address);
+		return Memoryjs.virtualQueryEx(handle, address);
 	},
 	attachDebugger(processId: number, killOnExit: boolean) {
-		return memoryjs.attachDebugger(processId, killOnExit);
+		return Memoryjs.attachDebugger(processId, killOnExit);
 	},
 	detatchDebugger(processId: number) {
-		return memoryjs.detatchDebugger(processId);
+		return Memoryjs.detatchDebugger(processId);
 	},
 	awaitDebugEvent(hardwareRegister: number, millisTimeout: number) {
-		return memoryjs.awaitDebugEvent(hardwareRegister, millisTimeout);
+		return Memoryjs.awaitDebugEvent(hardwareRegister, millisTimeout);
 	},
 	handleDebugEvent(processId: number, threadId: number) {
-		return memoryjs.handleDebugEvent(processId, threadId);
+		return Memoryjs.handleDebugEvent(processId, threadId);
 	},
 	setHardwareBreakpoint(processId: number, address: number, hardwareRegister: number, trigger: number, length: number) {
-		return memoryjs.setHardwareBreakpoint(processId, address, hardwareRegister, trigger, length);
+		return Memoryjs.setHardwareBreakpoint(processId, address, hardwareRegister, trigger, length);
 	},
 	removeHardwareBreakpoint(processId: number, hardwareRegister: number) {
-		return memoryjs.removeHardwareBreakpoint(processId, hardwareRegister);
+		return Memoryjs.removeHardwareBreakpoint(processId, hardwareRegister);
 	},
 	injectDll(handle: number, dllPath: string) {
 		if (!dllPath.endsWith('.dll')) throw new Error("Given path is invalid: file is not of type 'dll'.");
 		if (!fs.existsSync(dllPath)) throw new Error('Given path is invaild: file does not exist.');
-		return memoryjs.injectDll(handle, dllPath);
+		return Memoryjs.injectDll(handle, dllPath);
 	},
 	unloadDll(handle: number, moduleBaseAddressOrName: string | number) {
-		return memoryjs.unloadDll(handle, moduleBaseAddressOrName);
+		return Memoryjs.unloadDll(handle, moduleBaseAddressOrName);
 	},
-	Debugger: new Debugger(memoryjs),
 };
+
+export type Library = typeof library;
 
 export default {
 	...library,
-	STRUCTRON_TYPE_STRING: STRUCTRON_TYPE_STRING(memoryjs),
+	Debugger: new Debugger(library),
+	STRUCTRON_TYPE_STRING: STRUCTRON_TYPE_STRING(library),
 };
