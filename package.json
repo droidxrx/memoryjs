@@ -1,7 +1,14 @@
 {
-	"name": "memoryjs",
+	"name": "@droidxrx/memoryjs",
 	"version": "3.3.1",
 	"description": "Node add-on for memory reading and writing!",
+	"author": "DroidXrX <droidxrx@gmail.com> (https://github.com/droidxrx)",
+	"homepage": "https://github.com/droidxrx/memoryjs#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/droidxrx/memoryjs.git"
+	},
+	"license": "MIT",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
@@ -24,8 +31,6 @@
 		"management",
 		"addon"
 	],
-	"author": "Rob--",
-	"license": "MIT",
 	"gypfile": true,
 	"dependencies": {
 		"bindings": "^1.5.0",
@@ -66,7 +71,7 @@
 			"tsconfig.json"
 		],
 		"withoutPublish": true,
-		"tempDir": "package"
+		"tempDir": "package/"
 	}
 }
 
