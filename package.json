@@ -71,7 +71,7 @@
 			"tsconfig.json"
 		],
 		"withoutPublish": true,
-		"tempDir": "package/"
+		"tempDir": "package"
 	}
 }
 
