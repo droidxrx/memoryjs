@@ -9,7 +9,7 @@ export default defineConfig({
 		strict: false,
 		format: 'cjs',
 		interop: true,
-		exports: 'auto',
+		exports: 'named',
 		esModule: true,
 	},
 	external: [/node_modules/],
